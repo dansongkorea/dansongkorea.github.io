@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>보내는 사람</title>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="input_form.css">
+</head>
+<body>
+    <fieldset>
+        <legend>보내는 사람</legend>
+        <table>
+            <tr>
+                <td>이름</td>
+                <td><input type="text" size="35" name="sender_name" placeholder="이름"></td>
+            </tr>
+            <tr>
+                <td>전화번호</td>
+                <td><input type="tel" size="35" name="sender_tel" placeholder="전화번호"></td>
+            </tr>
+
+            <tr>
+                <td>주소</td>
+                <td><input type="text" size="35" name="sender_address" placeholder="주소"></td>
+            </tr>
+            <tr>
+                <td>품목</td>
+                <td>
+                    <select name="item_type"><option value="documents">서류</option><option value="electronics">전자기기</option><option value="유리제품">유라제품</option></select>
+                    파손주의<input type="radio" size="35" name="item_comment" value="파손주의">냉장<input type="radio" size="35" name="item_comment" value="냉장">냉동<input type="radio" size="35" name="item_comment" value="냉동">
+                </td>
+            </tr>
+            <tr>
+                <td>품목설명</td>
+                <td><input type="text" size="35" name="item_description" placeholder="품목상세"></td>
+            </tr>
+            <tr>
+                <td>금액</td>
+                <td><input type="number" size="35" name="price" placeholder="금액"> won</td>
+            </tr>
+        </table>
+    </fieldset>
+    <div class="text">
+    <h1>주의사항</h1>
+        <h5>1. 손해배상 한도액</h5>
+    </div>
+<button>완료</button>
+</body>
+</html>
