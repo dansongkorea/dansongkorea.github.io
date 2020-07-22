@@ -1,7 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>다담다</title>
+    <link rel="stylesheet" type="text/css" href="/css/common.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+</head>
+<body>
+    <center><img src ="https://github.com/yjpgmer/my-first-blog/blob/master/main.jpg?raw=true"></img></center>
+        <div id="login_box">
+                <h1>로그인</h1>
+                        <form method="post" action="/member/login_ok.php">
+                                <table align="center" border="0" cellspacing="0" width="300">
+                                <tr>
+                                <td width="130" colspan="1">
+                                <input type="text" name="userid" class="inph">
+                        </td>
+                        <td rowspan="2" align="center" width="100" >
+                                <button type="submit" id="btn" >로그인</button>
+                        </td>
+                        </tr>
+                        <tr>
+                        <td width="130" colspan="1">
+                        <input type="password" name="userpw" class="inph">
+                </td>
+                </tr>
+                <tr>
+                        <td colspan="3" align="center" class="mem">
+                <a href="/member/member.php">회원가입 하시겠습니까?</a>
+           </td>
+        </tr>
+    </table>
+  </form>
+</div>
+    
+    
 <p style="margin-top:-12px">
     <b>Chrome 브라우저는 https 환경에서만 geolocation을 지원합니다.</b> 참고해주세요.
 </p>
 <div id="map" style="width:100%;height:350px;"></div>
+
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=dc1e798045da28a7d8f429a495c8326c
+"></script>
 <script>
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
     mapOption = { 
@@ -61,3 +101,5 @@ function displayMarker(locPosition, message) {
     map.setCenter(locPosition);      
 }    
 </script>
+</body>
+</html>
