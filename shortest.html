@@ -1,0 +1,106 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>최단거리 및 시간</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://api2.sktelecom.com/tmap/js?version=1&format=javascript&appKey=l7xx438a2f94ae6f4b85a127aae20ea6f139"></script>
+    <script type="text/javascript">
+
+        var latitude = 0;
+        var longitude = 0;
+;(function($) {     navigator.geolocation.getCurrentPosition(function (pos) {
+        latitude = pos.coords.latitude;
+        longitude = pos.coords.longitude;
+        console.log("현재 위치는 : " + latitude + ", " + longitude);
+        console.log(1)
+    }); })(jQuery);
+
+        function initTmap() {
+            console.log(2)
+            console.log("현재 위치는 : " + latitude + ", " + longitude);
+            var map = new Tmap.Map({
+                div: 'map_div',  // 결과 지도를 표시할 곳
+                width: "90%",  // 가로와 세로 사이즈는 픽셀로 적을 수도 있고
+                height: "90%", // 퍼센트로 적을 수도 있다. 홈페이지 예제는 픽셀로 되어 있음.
+            });
+            var startX = longitude;
+            var startY = latitude;
+            var endX = 127.028131;
+            var endY = 37.239072;
+            var passList = null;
+            var prtcl;
+            var headers = {};
+
+            headers["appKey"] = "인증키"; // 발급받은 인증키를 넣어야 한다
+
+            headers["appKey"] = "l7xx438a2f94ae6f4b85a127aae20ea6f139";
+
+            $.ajax({
+                method: "POST",
+                headers: headers,
+                url: "https://api2.sktelecom.com/tmap/routes?version=1&format=xml",
+                async: false,
+                data: {
+                    startX: startX,
+                    startY: startY,
+                    endX: endX,
+                    endY: endY,
+                    passList: passList,
+                    reqCoordType: "WGS84GEO",
+                    resCoordType: "EPSG3857",
+                    angle: "172",
+                    searchOption: "0",
+                    trafficInfo: "Y"
+                },
+                success: function (response) { //API가 제대로 작동할 경우 실행될 코드
+                    prtcl = response;
+
+                    // 결과 출력 부분 - 여기는 잘 모르겠음.
+                    var innerHtml = "";
+                    var prtclString = new XMLSerializer().serializeToString(prtcl);//xml to String
+                    xmlDoc = $.parseXML(prtclString),
+                        $xml = $(xmlDoc),
+                        $intRate = $xml.find("Document");
+
+                    var tDistance = " 총 거리 : " + ($intRate[0].getElementsByTagName("tmap:totalDistance")[0].childNodes[0].nodeValue / 1000).toFixed(1) + "km,";
+                    var tTime = " 총 시간 : " + ($intRate[0].getElementsByTagName("tmap:totalTime")[0].childNodes[0].nodeValue / 60).toFixed(0) + "분,";
+                    var tFare = " 총 요금 : " + $intRate[0].getElementsByTagName("tmap:totalFare")[0].childNodes[0].nodeValue + "원,";
+                    var taxiFare = " 예상 택시 요금 : " + $intRate[0].getElementsByTagName("tmap:taxiFare")[0].childNodes[0].nodeValue + "원";
+
+                    $("#result").text(tDistance + tTime + tFare + taxiFare);
+
+                    // 실시간 교통정보 추가
+                    var trafficColors = {
+                        extractStyles: true,
+                        /* 실제 교통정보가 표출되면 아래와 같은 Color로 Line이 생성됩니다. */
+                        trafficDefaultColor: "#000000", //Default
+                        trafficType1Color: "#009900", //원활
+                        trafficType2Color: "#8E8111", //지체
+                        trafficType3Color: "#FF0000", //정체
+                    };
+                    var kmlForm = new Tmap.Format.KML(trafficColors).readTraffic(prtcl);
+                    routeLayer = new Tmap.Layer.Vector("vectorLayerID"); //백터 레이어 생성
+                    routeLayer.addFeatures(kmlForm); //교통정보를 백터 레이어에 추가
+
+                    map.addLayer(routeLayer); // 지도에 백터 레이어 추가
+
+                    // 경로탐색 결과 반경만큼 지도 레벨 조정
+                    map.zoomToExtent(routeLayer.getDataExtent());
+                },
+                error: function (request, status, error) { // API가 제대로 작동하지 않을 경우
+                    console.log("error 발생 code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                }
+            });
+        }
+
+    </script>
+
+<body onload="initTmap()">
+<div id="map_div">
+</div>
+<p id="result">결과 표시</p>
+</body>
+
+</head>
+</html>
